@@ -38,7 +38,7 @@ Then crop/optimize/edit your image however you like, add it to your project, and
 ### Links
 
 - Solution URL: [https://github.com/EDX-IL/Weather_Dashboard](https://github.com/EDX-IL/Weather_Dashboard)
-- Live Site URL: [https://edx-il.github.io/Weather_Dashboard/](https://edx-il.github.io/Weather_Dashboard/)
+- Live Site URL: [https://edx-il.github.io/Weather_Dashboard/](https://edx-il.github.io/Weather_Dashboard/index.html)
 
 ## My process
 
