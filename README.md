@@ -1,3 +1,6 @@
+# Weather_Dashboard
+Weather Dashboard that runs in a browser toto present 5 Day Weather Forecast with user input form
+
 ## Table of contents
 
 - [Overview](#overview)
@@ -34,17 +37,18 @@ Then crop/optimize/edit your image however you like, add it to your project, and
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [https://github.com/EDX-IL/Weather_Dashboard](https://github.com/EDX-IL/Weather_Dashboard)
+- Live Site URL: [https://edx-il.github.io/Weather_Dashboard/](https://edx-il.github.io/Weather_Dashboard/)
 
 ## My process
 
 ### Built with
 
 - Semantic HTML5 markup
+- Ajax Api
+- JQuery
 - CSS custom properties
 - Flexbox
-- CSS Grid
 - Mobile-first workflow
 
 
@@ -90,9 +94,8 @@ Use this section to outline areas that you want to continue focusing on in futur
 **Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
 
 ## Author
-  Your Name
-- Website - [your name or website url](https://www.your-site.com)
-- GitHub - [your GitHub username](https://github.com/yourusername)
+  Ian Logendra
+- GitHub - [EDX-IL](https://github.com/EDX-IL)
 
 **Note: Delete this note and add/remove/edit lines above based on what links you'd like to share.**
 
