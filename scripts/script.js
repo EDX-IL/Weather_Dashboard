@@ -1,5 +1,6 @@
 let searchButtonEl = document.querySelector("#search-button");
 let searchInputEl = document.querySelector("#search-input");
+let historyEl = document.querySelector("#history");
 
 //variable to store the search input value ie. city
 //let searchInputVal = "";
@@ -35,7 +36,6 @@ searchButtonEl.addEventListener("click", function (event) {
       //TODO check if city entered is actual city
 
       addCityAndCoOrdToLocalStorage(searchInputVal);
-
     }
   }
 });
@@ -56,31 +56,41 @@ function addCityAndCoOrdToLocalStorage(cityToAdd) {
   fetch(queryURL)
     .then((response) => response.json())
     .then((cityReturn) => {
-     // console.log(cityReturn[0]);
+      // console.log(cityReturn[0]);
 
-      let cityCoOrds = []
+      let cityCoOrds = [];
 
       let cityCoOrdLat = cityReturn[0].lat;
       let cityCoOrdLon = cityReturn[0].lon;
-       cityCoOrds.push(cityCoOrdLat);
-       cityCoOrds.push(cityCoOrdLon); 
-    //  console.log("coOrdsArr:" , (JSON.stringify(cityCoOrds)));
-      //store the city and coordinates 
-      localStorage.setItem(cityToAdd, JSON.stringify (cityCoOrds));
-      
-      // let retrievedObject = localStorage.getItem(cityToAdd);
-      // console.log('retrievedObject', retrievedObject);
+      cityCoOrds.push(cityCoOrdLat);
+      cityCoOrds.push(cityCoOrdLon);
+      //  console.log("coOrdsArr:" , (JSON.stringify(cityCoOrds)));
+      //store the city and coordinates
+      localStorage.setItem(cityToAdd, JSON.stringify(cityCoOrds));
 
-      // console.log('json retrievedObject: ', JSON.parse(retrievedObject));
+      //   let retrievedObject = localStorage.getItem(cityToAdd);
+      //  console.log('retrievedObject', retrievedObject);
 
-
+      //console.log('json retrievedObject: ', JSON.parse(retrievedObject));
+    })
+    .then((response) => {
+      updateCityButtons();
     });
-
 }
 
 //This function updates the display
-function updateDisplay() {
-  console.log(getFuncName());
+function updateCityButtons() {
+  // console.log(getFuncName());
+
+  for (let index = 0; index < localStorage.length; index++) {
+    var city = localStorage.key(index);
+
+    // var cityCoOrds = JSON.parse(localStorage.getItem(localStorage.key(index)));
+    
+    //add button for each city under historyEL
+
+    console.log("city", city);
+  }
 }
 
 // //This function converts the city name to coordinates using OpenWeatherMap GeoCodingAPI
