@@ -43,9 +43,8 @@ searchButtonEl.addEventListener("click", function (event) {
 function addCityToLocalStorage(cityToAdd) {
   //console.log(getFuncName());
 
-  
   console.log("1" + convertCityToCoOrdinates(cityToAdd));
-  cityCoOrds = [1,2];
+  cityCoOrds = [1, 2];
 
   localStorage.setItem(cityToAdd, cityCoOrds);
   console.log(localStorage);
@@ -59,43 +58,48 @@ function updateDisplay() {
 //This function converts the city name to coordinates using OpenWeatherMap GeoCodingAPI
 function convertCityToCoOrdinates(cityName) {
   //console.log(getFuncName());
-  //TODO implement call to API - using cityName temporarily
-  let cityCoOrds=[0,0];
+  //TODO return longitude and latitude
+  let cityCoOrds = [0, 0];
 
-  let queryURL = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1"+ "&apikey="+OWMApiKey;
-  console.log (queryURL);
+  let queryURL =
+    "http://api.openweathermap.org/geo/1.0/direct?q=" +
+    cityName +
+    "&limit=1" +
+    "&apikey=" +
+    OWMApiKey;
+  console.log(queryURL);
   fetch(queryURL)
-  .then( response => response.json())
-  .then(cityCoOrds => {
-    console.log(cityCoOrds);
-    let cityCoOrdsLat = 0;
-    let cityCoOrdsLon = 0;
-    return [cityCoOrdsLat,cityCoOrdsLon];
-  })
-  
+    .then((response) => response.json())
+    .then((cityCoOrds) => {
+      console.log(cityCoOrds);
+      let cityCoOrdsLat = 0;
+      let cityCoOrdsLon = 0;
+      return [cityCoOrdsLat, cityCoOrdsLon];
+    });
 }
 
-//This function takes longditude and latitude and returns weather
-function getWeatherFromCoOrdinates (lat, lon) {
-    console.log(getFuncName());
-   
-    //Use Glasgow to test
-    lat = 55.8609825;
-    lon = -4.2488787;
+//This function takes longitude and latitude and returns weather
+function getWeatherFromCoOrdinates(lat, lon) {
+  console.log(getFuncName());
 
-    console.log(lat,lon );
+  //Use Glasgow to test
+  lat = 55.8609825;
+  lon = -4.2488787;
 
-    let queryURL = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid="+OWMApiKey;
-    console.log (queryURL);
+  console.log(lat, lon);
 
-    fetch(queryURL)
-   .then( response => response.json())
-   .then(weather => {
-    console.log(weather);
-   
-  })
-  
+  let queryURL =
+    "https://api.openweathermap.org/data/2.5/forecast?lat=" +
+    lat +
+    "&lon=" +
+    lon +
+    "&appid=" +
+    OWMApiKey;
+  console.log(queryURL);
+
+  fetch(queryURL)
+    .then((response) => response.json())
+    .then((weather) => {
+      console.log(weather);
+    });
 }
-
-
-
