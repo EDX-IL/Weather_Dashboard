@@ -108,67 +108,6 @@ function updateCityButtons() {
   }
 }
 
-// //This function converts the city name to coordinates using OpenWeatherMap GeoCodingAPI
-// function convertCityToCoOrdinates(cityName) {
-//   console.log(getFuncName());
-//   //TODO return longitude and latitude
-//   let cityCoOrds = [0, 0];
-
-//   let queryURL =
-//     "http://api.openweathermap.org/geo/1.0/direct?q=" +
-//     cityName +
-//     "&limit=1" +
-//     "&apikey=" +
-//     OWMApiKey;
-//   console.log(queryURL);
-//   fetch(queryURL)
-//     .then((response) => response.json())
-//     .then((cityCoOrds) => {
-//       console.log("citycoords:"+ cityCoOrds );
-//       let cityCoOrdsLat = 100;
-//       let cityCoOrdsLon = 200;
-//       return [cityCoOrdsLat, cityCoOrdsLon];
-//     });
-// }
-
-//This function takes longitude and latitude and returns weather
-function getWeatherFromCoOrdinates(lat, lon) {
-  console.log(getFuncName());
-
-  //Use Glasgow to test
-  lat = 55.8609825;
-  lon = -4.2488787;
-
-  console.log(lat, lon);
-
-  let queryURL =
-    "https://api.openweathermap.org/data/2.5/forecast?lat=" +
-    lat +
-    "&lon=" +
-    lon +
-    "&appid=" +
-    OWMApiKey;
-  console.log(queryURL);
-
-  fetch(queryURL)
-    .then((response) => response.json())
-    .then((weather) => {
-      console.log(weather);
-    });
-}
-
-//function to display local storage as button
-function displayLocalStorageAsButtons() {
-  //  console.log(getFuncName());
-
-  for (let index = 0; index < localStorage.length; index++) {
-    //  console.log(localStorage);
-    let city = localStorage.key(index);
-    console.log(city);
-
-    //TODO Add Buttons
-  }
-}
 
 //function to clear local storage
 function clearLocalStorage() {
@@ -180,42 +119,53 @@ function displayForecastForCity(cityClicked) {
   // console.log(getFuncName());
   // console.log(cityClicked);
 
-  // get latitude and longitude for cityclicked
+  // get latitude and longitude for city clicked
   let cityCoOrds = JSON.parse(localStorage.getItem(cityClicked));
 
   // console.log(cityCoOrds);
   let cityLat = cityCoOrds[0];
   let cityLon = cityCoOrds[1];
 
-  console.log("cityLat:", cityLat);
-  console.log("cityLon:", cityLon);
+  // console.log("cityLat:", cityLat);
+  // console.log("cityLon:", cityLon);
 
   getForecastFromLatAndLon(cityLat, cityLon);
 }
 
+//function to getForecast from latitude and longitude
 function getForecastFromLatAndLon(lat, lon) {
-  console.log(getFuncName());
+  // console.log(getFuncName());
+  // console.log(lat);
+  // console.log(lon);
 
-  //"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}";
-  
-    console.log(lat);
-    console.log(lon);
+  //url with APIkey
+  let openWMForecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OWMApiKey}`;
 
-    //get forecast from lat and lon
-    let openWMForecastURL =
-    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OWMApiKey}`
- 
-    
-  //  OWMApiKey;
-  console.log(openWMForecastURL);
+  // console.log(openWMForecastURL);
 
   fetch(openWMForecastURL)
     .then((response) => response.json())
     .then((forecastReturn) => {
-       console.log(forecastReturn);
+    //  console.log(forecastReturn);
 
-    
+      displayCityFromForecast (forecastReturn);
+      display5DayForecast (forecastReturn);
+
     });
+}
+
+//function that takes the returned forecast from OWM and displays the city as they return it
+function displayCityFromForecast(returnedForecast){
+  console.log(getFuncName());
+  console.log(returnedForecast);
+
+
+}
+
+//function to display 5Day Forecast from OWM 
+function display5DayForecast(returnedForecast){
+  console.log(getFuncName());
+  console.log(returnedForecast);
 
 
 }
