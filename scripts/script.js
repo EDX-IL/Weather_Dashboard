@@ -19,19 +19,24 @@ let OWMApiKey = "f96f7ff289e95a70e78121ee26801ea4";
 //on opening up the page - load local storage
 document.onload = updateCityButtons();
 
-//function to clear local storage
-function clearLocalStorage() {
-  // console.log(getFuncName());
-  localStorage.clear();
-}
+// EVENT LISTENERS
 
-//add listener for clear-button
+// add event lister for history element i.e the city buttons
+historyEl.addEventListener("click", function (event) {
+  //check a button has been clicked
+  if (event.target.matches("button")) {
+    let cityClicked = event.target.textContent;
+    displayForecastForCity(cityClicked);
+  }
+});
+
+//add event listener for clear-button
 clearButtonEl.addEventListener("click", function () {
   clearLocalStorage();
   updateCityButtons();
 });
 
-//add listener for searchButtonEl
+//add event listener for searchButtonEl
 searchButtonEl.addEventListener("click", function (event) {
   event.preventDefault();
   //alert("search button pressed");
@@ -56,15 +61,15 @@ function addCityAndCoOrdToLocalStorage(cityToAdd) {
   //console.log(getFuncName());
 
   //get coordinates from city
-  let queryURL =
+  let openWMGeoURL =
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
     cityToAdd +
     "&limit=1" +
     "&apikey=" +
     OWMApiKey;
-  //console.log(queryURL);
+  //console.log(openWMGeoURL);
 
-  fetch(queryURL)
+  fetch(openWMGeoURL)
     .then((response) => response.json())
     .then((cityReturn) => {
       // console.log(cityReturn[0]);
@@ -77,11 +82,6 @@ function addCityAndCoOrdToLocalStorage(cityToAdd) {
       cityCoOrds.push(cityCoOrdLon);
       //  console.log("coOrdsArr:" , (JSON.stringify(cityCoOrds)));
       localStorage.setItem(cityToAdd, JSON.stringify(cityCoOrds));
-
-      //   let retrievedObject = localStorage.getItem(cityToAdd);
-      //  console.log('retrievedObject', retrievedObject);
-
-      //console.log('json retrievedObject: ', JSON.parse(retrievedObject));
     })
     .then((response) => {
       updateCityButtons();
@@ -98,14 +98,10 @@ function updateCityButtons() {
   for (let index = 0; index < localStorage.length; index++) {
     var city = localStorage.key(index);
 
-    // var cityCoOrds = JSON.parse(localStorage.getItem(localStorage.key(index)));
-
-    //add button for each city under historyEL
-    let newButtonEl = document.createElement("button", id = "TAG");
+    //add button for each city under historyEL-set unique ID attribute
+    let newButtonEl = document.createElement("button", (id = "TAG"));
     newButtonEl.textContent = city;
-    newButtonEl.setAttribute("id", "button-"+city);
-    //SET THE BUTTON ID TO THE CITY
-
+    newButtonEl.setAttribute("id", "button-" + city);
     historyEl.append(newButtonEl);
 
     //  console.log("city", city);
@@ -172,4 +168,54 @@ function displayLocalStorageAsButtons() {
 
     //TODO Add Buttons
   }
+}
+
+//function to clear local storage
+function clearLocalStorage() {
+  // console.log(getFuncName());
+  localStorage.clear();
+}
+
+function displayForecastForCity(cityClicked) {
+  // console.log(getFuncName());
+  // console.log(cityClicked);
+
+  // get latitude and longitude for cityclicked
+  let cityCoOrds = JSON.parse(localStorage.getItem(cityClicked));
+
+  // console.log(cityCoOrds);
+  let cityLat = cityCoOrds[0];
+  let cityLon = cityCoOrds[1];
+
+  console.log("cityLat:", cityLat);
+  console.log("cityLon:", cityLon);
+
+  getForecastFromLatAndLon(cityLat, cityLon);
+}
+
+function getForecastFromLatAndLon(lat, lon) {
+  console.log(getFuncName());
+
+  //"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}";
+  
+    console.log(lat);
+    console.log(lon);
+
+    //get forecast from lat and lon
+    let openWMForecastURL =
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OWMApiKey}`
+ 
+    
+  //  OWMApiKey;
+  console.log(openWMForecastURL);
+
+  fetch(openWMForecastURL)
+    .then((response) => response.json())
+    .then((forecastReturn) => {
+       console.log(forecastReturn);
+
+    
+    });
+
+
 }

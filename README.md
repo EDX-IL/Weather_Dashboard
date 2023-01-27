@@ -91,6 +91,7 @@ Use this section to outline areas that you want to continue focusing on in futur
 - [OpenWeatherMap Geocoding API](https://openweathermap.org/api/geocoding-api) - This documentation helped me convert the geographical name to co-ordinates
 - [OpenWeatherMap 5 Day Forecast API](https://openweathermap.org/forecast5) - This documentation help me understand how to use the API to retrieve the 5 day weather forecast from OpenWeatherMap
 - [Local Storage Documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) - This helped my implement the local storage element on my project.
+- [Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) - This helped with an explanation of how to use variables in strings using backticks
 
 **Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
 
@@ -102,6 +103,4 @@ Use this section to outline areas that you want to continue focusing on in futur
 
 ## Acknowledgments
 
-This is where you can give a hat tip to anyone who helped you out on this project. Perhaps you worked in a team or got some inspiration from someone else's solution. This is the perfect place to give them some credit.
-
-**Note: Delete this note and edit this section's content as necessary. If you completed this challenge by yourself, feel free to delete this section entirely.**
+Dane (Instructor) - Great explanations in class. And very helpful video pre Officer Hours which allowed me to attempt the project having had other distractions this week
