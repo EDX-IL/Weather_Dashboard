@@ -33,11 +33,24 @@ searchButtonEl.addEventListener("click", function (event) {
 //This function stores the passed parament to local storage
 function addCityToLocalStorage(cityToAdd) {
   //  console.log(getFuncName());
-  localStorage.setItem(cityToAdd, cityToAdd);
+
+let cityCoOrds = convertCityToCoOrdinates (citytoAdd);
+
+
+  localStorage.setItem(cityToAdd, cityCoOrds);
   console.log(localStorage);
 }
 
 //This function updates the display
 function updateDisplay() {
   console.log(getFuncName());
+}
+
+
+//This function converts the city name to coordinates using OpenWeatherMap GeoCodingAPI
+function convertCityToCoOrdinates(cityName){
+    console.log(getFuncName());
+    //TODO implement call to API - using cityName temporarily
+    return cityName;
+
 }
