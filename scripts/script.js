@@ -103,3 +103,20 @@ function getWeatherFromCoOrdinates(lat, lon) {
       console.log(weather);
     });
 }
+
+//function to display local storage as button
+function displayLocalStorageAsButtons(){
+  //  console.log(getFuncName());
+
+    for (let index = 0; index < localStorage.length; index++) {
+      //  console.log(localStorage);
+        let city = localStorage.key(index);
+       console.log(city);
+
+       //TODO Add Button
+
+        
+    }
+
+
+}
