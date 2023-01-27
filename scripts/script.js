@@ -23,8 +23,9 @@ searchButtonEl.addEventListener("click", function(event){
       //  console.log(searchInputVal);    
         if(searchInputVal !== ""){
         //TODO check if what was entered was in there before
+        //TODO check if city entered is actual city
 
-            addCityToList (searchInputVal);
+            addCityToLocalStorage (searchInputVal);
 
 
 
@@ -38,8 +39,7 @@ searchButtonEl.addEventListener("click", function(event){
  })
 
 
- function addCityToList (cityToAdd){
+ function addCityToLocalStorage (cityToAdd){
     console.log(getFuncName());
-    cityList.push(cityToAdd);
-
+   
  }
