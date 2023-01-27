@@ -76,7 +76,6 @@ function addCityAndCoOrdToLocalStorage(cityToAdd) {
       cityCoOrds.push(cityCoOrdLat);
       cityCoOrds.push(cityCoOrdLon);
       //  console.log("coOrdsArr:" , (JSON.stringify(cityCoOrds)));
-      //store the city and coordinates
       localStorage.setItem(cityToAdd, JSON.stringify(cityCoOrds));
 
       //   let retrievedObject = localStorage.getItem(cityToAdd);
@@ -102,8 +101,11 @@ function updateCityButtons() {
     // var cityCoOrds = JSON.parse(localStorage.getItem(localStorage.key(index)));
 
     //add button for each city under historyEL
-    let newButtonEl = document.createElement("button");
+    let newButtonEl = document.createElement("button", id = "TAG");
     newButtonEl.textContent = city;
+    newButtonEl.setAttribute("id", "button-"+city);
+    //SET THE BUTTON ID TO THE CITY
+
     historyEl.append(newButtonEl);
 
     //  console.log("city", city);
