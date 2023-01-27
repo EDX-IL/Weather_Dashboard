@@ -1,6 +1,7 @@
 let searchButtonEl = document.querySelector("#search-button");
 let searchInputEl = document.querySelector("#search-input");
 let historyEl = document.querySelector("#history");
+let clearButtonEl = document.querySelector("#clear-button");
 
 //variable to store the search input value ie. city
 //let searchInputVal = "";
@@ -15,10 +16,20 @@ let OWMApiKey = "f96f7ff289e95a70e78121ee26801ea4";
 //OpenWeatherMap Geocoding API
 //"http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}";
 
+//on opening up the page - load local storage
+document.onload = updateCityButtons();
+
 //function to clear local storage
 function clearLocalStorage() {
+  // console.log(getFuncName());
   localStorage.clear();
 }
+
+//add listener for clear-button
+clearButtonEl.addEventListener("click", function () {
+  clearLocalStorage();
+  updateCityButtons();
+});
 
 //add listener for searchButtonEl
 searchButtonEl.addEventListener("click", function (event) {
@@ -82,14 +93,20 @@ function addCityAndCoOrdToLocalStorage(cityToAdd) {
 function updateCityButtons() {
   // console.log(getFuncName());
 
+  //clear button
+  historyEl.innerHTML = "";
+
   for (let index = 0; index < localStorage.length; index++) {
     var city = localStorage.key(index);
 
     // var cityCoOrds = JSON.parse(localStorage.getItem(localStorage.key(index)));
-    
-    //add button for each city under historyEL
 
-    console.log("city", city);
+    //add button for each city under historyEL
+    let newButtonEl = document.createElement("button");
+    newButtonEl.textContent = city;
+    historyEl.append(newButtonEl);
+
+    //  console.log("city", city);
   }
 }
 
