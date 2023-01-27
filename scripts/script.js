@@ -34,19 +34,38 @@ searchButtonEl.addEventListener("click", function (event) {
     if (searchInputVal !== "") {
       //TODO check if city entered is actual city
 
-      addCityToLocalStorage(searchInputVal);
+      addCityAndCoOrdToLocalStorage(searchInputVal);
     }
   }
 });
 
-//This function stores the passed parament to local storage
-function addCityToLocalStorage(cityToAdd) {
+//This function stores the city and coordindates to local storage
+function addCityAndCoOrdToLocalStorage(cityToAdd) {
   //console.log(getFuncName());
 
-  console.log("1" + convertCityToCoOrdinates(cityToAdd));
-  cityCoOrds = [1, 2];
+    let coOrdsArr = [0,0];
 
-  localStorage.setItem(cityToAdd, cityCoOrds);
+  //get coordinates from city
+  let queryURL =
+    "http://api.openweathermap.org/geo/1.0/direct?q=" +
+    cityToAdd +
+    "&limit=1" +
+    "&apikey=" +
+    OWMApiKey;
+  console.log(queryURL);
+
+  fetch(queryURL)
+    .then((response) => response.json())
+    .then((cityCoOrds) => {
+      console.log("2:" + cityCoOrds);
+      let cityCoOrdsLat = 100;
+      let cityCoOrdsLon = 200;
+      coOrdsArr = [cityCoOrdsLat,cityCoOrdsLon];
+      console.log ("coOrdsArr:"+JSON.stringify(coOrdsArr));
+      localStorage.setItem(cityToAdd, JSON.stringify(coOrdsArr));
+    });
+
+
   console.log(localStorage);
 }
 
@@ -55,28 +74,28 @@ function updateDisplay() {
   console.log(getFuncName());
 }
 
-//This function converts the city name to coordinates using OpenWeatherMap GeoCodingAPI
-function convertCityToCoOrdinates(cityName) {
-  //console.log(getFuncName());
-  //TODO return longitude and latitude
-  let cityCoOrds = [0, 0];
+// //This function converts the city name to coordinates using OpenWeatherMap GeoCodingAPI
+// function convertCityToCoOrdinates(cityName) {
+//   console.log(getFuncName());
+//   //TODO return longitude and latitude
+//   let cityCoOrds = [0, 0];
 
-  let queryURL =
-    "http://api.openweathermap.org/geo/1.0/direct?q=" +
-    cityName +
-    "&limit=1" +
-    "&apikey=" +
-    OWMApiKey;
-  console.log(queryURL);
-  fetch(queryURL)
-    .then((response) => response.json())
-    .then((cityCoOrds) => {
-      console.log(cityCoOrds);
-      let cityCoOrdsLat = 0;
-      let cityCoOrdsLon = 0;
-      return [cityCoOrdsLat, cityCoOrdsLon];
-    });
-}
+//   let queryURL =
+//     "http://api.openweathermap.org/geo/1.0/direct?q=" +
+//     cityName +
+//     "&limit=1" +
+//     "&apikey=" +
+//     OWMApiKey;
+//   console.log(queryURL);
+//   fetch(queryURL)
+//     .then((response) => response.json())
+//     .then((cityCoOrds) => {
+//       console.log("citycoords:"+ cityCoOrds );
+//       let cityCoOrdsLat = 100;
+//       let cityCoOrdsLon = 200;
+//       return [cityCoOrdsLat, cityCoOrdsLon];
+//     });
+// }
 
 //This function takes longitude and latitude and returns weather
 function getWeatherFromCoOrdinates(lat, lon) {
@@ -114,7 +133,5 @@ function displayLocalStorageAsButtons() {
     console.log(city);
 
     //TODO Add Buttons
-
-    
   }
 }
