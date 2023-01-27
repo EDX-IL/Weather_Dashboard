@@ -35,6 +35,7 @@ searchButtonEl.addEventListener("click", function (event) {
       //TODO check if city entered is actual city
 
       addCityAndCoOrdToLocalStorage(searchInputVal);
+
     }
   }
 });
@@ -43,8 +44,6 @@ searchButtonEl.addEventListener("click", function (event) {
 function addCityAndCoOrdToLocalStorage(cityToAdd) {
   //console.log(getFuncName());
 
-    let coOrdsArr = [0,0];
-
   //get coordinates from city
   let queryURL =
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
@@ -52,21 +51,31 @@ function addCityAndCoOrdToLocalStorage(cityToAdd) {
     "&limit=1" +
     "&apikey=" +
     OWMApiKey;
-  console.log(queryURL);
+  //console.log(queryURL);
 
   fetch(queryURL)
     .then((response) => response.json())
-    .then((cityCoOrds) => {
-      console.log("2:" + cityCoOrds);
-      let cityCoOrdsLat = 100;
-      let cityCoOrdsLon = 200;
-      coOrdsArr = [cityCoOrdsLat,cityCoOrdsLon];
-      console.log ("coOrdsArr:"+JSON.stringify(coOrdsArr));
-      localStorage.setItem(cityToAdd, JSON.stringify(coOrdsArr));
+    .then((cityReturn) => {
+     // console.log(cityReturn[0]);
+
+      let cityCoOrds = []
+
+      let cityCoOrdLat = cityReturn[0].lat;
+      let cityCoOrdLon = cityReturn[0].lon;
+       cityCoOrds.push(cityCoOrdLat);
+       cityCoOrds.push(cityCoOrdLon); 
+    //  console.log("coOrdsArr:" , (JSON.stringify(cityCoOrds)));
+      //store the city and coordinates 
+      localStorage.setItem(cityToAdd, JSON.stringify (cityCoOrds));
+      
+      // let retrievedObject = localStorage.getItem(cityToAdd);
+      // console.log('retrievedObject', retrievedObject);
+
+      // console.log('json retrievedObject: ', JSON.parse(retrievedObject));
+
+
     });
 
-
-  console.log(localStorage);
 }
 
 //This function updates the display
