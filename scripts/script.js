@@ -3,18 +3,14 @@ let searchInputEl = document.querySelector("#search-input");
 let historyEl = document.querySelector("#history");
 let clearButtonEl = document.querySelector("#clear-button");
 
+//TODO handle empty local storage
+
 //variable to store the search input value ie. city
 //let searchInputVal = "";
 let searchInputVal = searchInputEl.placeholder;
 
 //MyOpenWeatherMap ApiKey
 let OWMApiKey = "f96f7ff289e95a70e78121ee26801ea4";
-
-//OpenWeatherMap 5 day Forecast API
-//"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}";
-
-//OpenWeatherMap Geocoding API
-//"http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}";
 
 //on opening up the page - load local storage
 document.onload = updateCityButtons();
@@ -108,7 +104,6 @@ function updateCityButtons() {
   }
 }
 
-
 //function to clear local storage
 function clearLocalStorage() {
   // console.log(getFuncName());
@@ -146,26 +141,32 @@ function getForecastFromLatAndLon(lat, lon) {
   fetch(openWMForecastURL)
     .then((response) => response.json())
     .then((forecastReturn) => {
-    //  console.log(forecastReturn);
+      //  console.log(forecastReturn);
 
-      displayCityFromForecast (forecastReturn);
-      display5DayForecast (forecastReturn);
-
+      displayCityFromForecast(forecastReturn);
+      display5DayForecast(forecastReturn);
     });
 }
 
 //function that takes the returned forecast from OWM and displays the city as they return it
-function displayCityFromForecast(returnedForecast){
-  console.log(getFuncName());
-  console.log(returnedForecast);
-
-
+function displayCityFromForecast(returnedForecast) {
+  // console.log(getFuncName());
+  let cityToDisplay = returnedForecast.city.name;
+  console.log(cityToDisplay);
 }
 
-//function to display 5Day Forecast from OWM 
-function display5DayForecast(returnedForecast){
-  console.log(getFuncName());
-  console.log(returnedForecast);
+//function to display 5Day Forecast from OWM
+function display5DayForecast(returnedForecast) {
+  //  console.log(getFuncName());
+ // console.log(returnedForecast);
 
+  for (let index = 4; index < returnedForecast.list.length; index = index + 8) {
+    const element = returnedForecast[index];
 
+    let forecastDate = moment
+      .unix(returnedForecast.list[index].dt)
+      .format("DD MMM YYYY hh:mm a");
+
+    console.log(forecastDate);
+  }
 }
