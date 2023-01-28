@@ -81,7 +81,7 @@ function updateCityButtons() {
 //This function stores the city and coordindates to local storage
 function addCityAndCoOrdToLocalStorage(cityToAdd) {
   // URL to get coordinates from city
-  let openWMGeoURL = `"http://api.openweathermap.org/geo/1.0/direct?q=${cityToAdd}&limit=1&apikey=${OWMApiKey}`;
+  let openWMGeoURL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityToAdd}&limit=1&apikey=${OWMApiKey}`;
 
   fetch(openWMGeoURL)
     .then((response) => response.json())
@@ -146,6 +146,9 @@ function display5DayForecast(returnedForecast) {
   // console.log(returnedForecast);
   let dayIndex = 0;
 
+  //clear 5 day forecast
+  forecastEl.innerHTML = "";
+
   for (let index = 4; index < returnedForecast.list.length; index = index + 8) {
     // const element = returnedForecast[index];
 
@@ -160,18 +163,32 @@ function display5DayForecast(returnedForecast) {
     //  console.log ('day', dayIndex);
 
     //TODO Dynamically create HTML Cards for each day
+    
     let newDiv = document.createElement("div");
-    let newDiv2 = document.createElement("div");
     let newImg = document.createElement("img");
+    let newDiv2 = document.createElement("div");
+    let newP = document.createElement("p")
+
+    
     newDiv.id = "day" + (dayIndex + 1);
   //  newDiv.textContent = "day:" + (dayIndex + 1) + " forecast";
     newDiv.className = "card";
     newDiv.style = "width: 20%";
 
     newImg.className="card-img-top";
-    newImg.src = "./images/default.png"
+    newImg.src = "./images/default.png";
+    newImg.alt = "Open Weather Map Logo";
+
+    newDiv2.className = "card-body";
+
+    newP.className="card-text";
+    newP.textContent = "day:" + (dayIndex + 1) + " forecast";
+
 
     newDiv.append(newImg);
+    newDiv2.append(newP);
+    newDiv.append(newDiv2);
+  
 
 
     forecastEl.append(newDiv);
