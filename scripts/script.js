@@ -2,6 +2,10 @@ let searchButtonEl = document.querySelector("#search-button");
 let searchInputEl = document.querySelector("#search-input");
 let historyEl = document.querySelector("#history");
 let clearButtonEl = document.querySelector("#clear-button");
+let forecastEl = document.querySelector("#forecast");
+
+//array to store forecast for 5 days (0-4)
+let dayForecastArr = [];
 
 //TODO handle empty local storage
 
@@ -52,18 +56,32 @@ searchButtonEl.addEventListener("click", function (event) {
   }
 });
 
+//FUNCTIONS
+
+//function to clear local storage
+function clearLocalStorage() {
+  localStorage.clear();
+}
+
+//This function updates the display
+function updateCityButtons() {
+  historyEl.innerHTML = "";
+
+  for (let index = 0; index < localStorage.length; index++) {
+    var city = localStorage.key(index);
+
+    //add button for each city under historyEL-set unique ID attribute
+    let newButtonEl = document.createElement("button", (id = "TAG"));
+    newButtonEl.textContent = city;
+    newButtonEl.setAttribute("id", "button-" + city);
+    historyEl.append(newButtonEl);
+  }
+}
+
 //This function stores the city and coordindates to local storage
 function addCityAndCoOrdToLocalStorage(cityToAdd) {
-  //console.log(getFuncName());
-
-  //get coordinates from city
-  let openWMGeoURL =
-    "http://api.openweathermap.org/geo/1.0/direct?q=" +
-    cityToAdd +
-    "&limit=1" +
-    "&apikey=" +
-    OWMApiKey;
-  //console.log(openWMGeoURL);
+  // URL to get coordinates from city
+  let openWMGeoURL = `"http://api.openweathermap.org/geo/1.0/direct?q=${cityToAdd}&limit=1&apikey=${OWMApiKey}`;
 
   fetch(openWMGeoURL)
     .then((response) => response.json())
@@ -82,32 +100,6 @@ function addCityAndCoOrdToLocalStorage(cityToAdd) {
     .then((response) => {
       updateCityButtons();
     });
-}
-
-//This function updates the display
-function updateCityButtons() {
-  // console.log(getFuncName());
-
-  //clear button
-  historyEl.innerHTML = "";
-
-  for (let index = 0; index < localStorage.length; index++) {
-    var city = localStorage.key(index);
-
-    //add button for each city under historyEL-set unique ID attribute
-    let newButtonEl = document.createElement("button", (id = "TAG"));
-    newButtonEl.textContent = city;
-    newButtonEl.setAttribute("id", "button-" + city);
-    historyEl.append(newButtonEl);
-
-    //  console.log("city", city);
-  }
-}
-
-//function to clear local storage
-function clearLocalStorage() {
-  // console.log(getFuncName());
-  localStorage.clear();
 }
 
 function displayForecastForCity(cityClicked) {
@@ -129,20 +121,12 @@ function displayForecastForCity(cityClicked) {
 
 //function to getForecast from latitude and longitude
 function getForecastFromLatAndLon(lat, lon) {
-  // console.log(getFuncName());
-  // console.log(lat);
-  // console.log(lon);
-
-  //url with APIkey
+  //URL to Get forecast from coordinates
   let openWMForecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OWMApiKey}`;
-
-  // console.log(openWMForecastURL);
 
   fetch(openWMForecastURL)
     .then((response) => response.json())
     .then((forecastReturn) => {
-      //  console.log(forecastReturn);
-
       displayCityFromForecast(forecastReturn);
       display5DayForecast(forecastReturn);
     });
@@ -150,23 +134,57 @@ function getForecastFromLatAndLon(lat, lon) {
 
 //function that takes the returned forecast from OWM and displays the city as they return it
 function displayCityFromForecast(returnedForecast) {
-  // console.log(getFuncName());
   let cityToDisplay = returnedForecast.city.name;
   console.log(cityToDisplay);
+
+  //ToDo Dynamically create HTML for City
 }
 
 //function to display 5Day Forecast from OWM
 function display5DayForecast(returnedForecast) {
   //  console.log(getFuncName());
- // console.log(returnedForecast);
+  // console.log(returnedForecast);
+  let dayIndex = 0;
 
   for (let index = 4; index < returnedForecast.list.length; index = index + 8) {
-    const element = returnedForecast[index];
+    // const element = returnedForecast[index];
+
+    dayForecastArr[dayIndex] = returnedForecast.list[index];
 
     let forecastDate = moment
       .unix(returnedForecast.list[index].dt)
       .format("DD MMM YYYY hh:mm a");
 
-    console.log(forecastDate);
+    console.log(dayForecastArr[dayIndex]);
+ 
+    //  console.log ('day', dayIndex);
+
+    //TODO Dynamically create HTML Cards for each day
+    let newDiv = document.createElement("div");
+    let newDiv2 = document.createElement("div");
+    let newImg = document.createElement("img");
+    newDiv.id = "day" + (dayIndex + 1);
+  //  newDiv.textContent = "day:" + (dayIndex + 1) + " forecast";
+    newDiv.className = "card";
+    newDiv.style = "width: 20%";
+
+    newImg.className="card-img-top";
+    newImg.src = "./images/default.png"
+
+    newDiv.append(newImg);
+
+
+    forecastEl.append(newDiv);
+
+
+    dayIndex++;
   }
+
+
+  // <div class="card" style="width: 20%;" id="day1">
+  //   <img src="..." class="card-img-top" alt="...">
+  //   <div class="card-body">
+  //     <p class="card-text">Day 1 Weather</p>
+  //   </div>
+  // </div>
 }
