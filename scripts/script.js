@@ -145,52 +145,41 @@ function displayTodayForecast(returnedForecast) {
 
 //function to display 5Day Forecast from OWM
 function display5DayForecast(returnedForecast) {
+  //TODO - look into icons vs local time
   // dayIndex is used access dayForecastArr(ay) for 5 (0-4)  days.
   let dayIndex = 0;
   //clear 5 day forecast
   forecastEl.innerHTML = "";
 
-
   //indexOffset is used to get midday from the returnedForecast (which is dependent on the time of day the request is made)
-  let indexOffset = 0
-  do {
-      forecastHour=moment
-        .unix(returnedForecast.list[indexOffset].dt)
-        .format("hh");
-      console.log(forecastHour);
-      console.log (indexOffset);
+  let indexOffset = 0;
+  forecastHour = moment
+    .unix(returnedForecast.list[indexOffset].dt)
+    .format("HH");
+
+  while (forecastHour != "12" && indexOffset < 41) {
     indexOffset++;
-    
-    } while ( (forecastHour !="12") && (indexOffset < 41));
-
-
-
-    console.log (indexOffset);
-  
+    forecastHour = moment
+      .unix(returnedForecast.list[indexOffset].dt)
+      .format("kk");
+  }
 
   for (
     let index = indexOffset;
     index < returnedForecast.list.length;
     index = index + 8
   ) {
-    // const element = returnedForecast[index];
-
     dayForecastArr[dayIndex] = returnedForecast.list[index];
 
     let forecastDate = moment
       .unix(returnedForecast.list[index].dt)
-      .format("DD MMM YYYY hh:mm ");
-
-    let forecastTime = moment
-      .unix(returnedForecast.list[index].dt)
-      .format("hh:mm a ");
+      .format("DD MMM YYYY hh:mm a ");
 
     //values to be displayed for each day
     let forecastTemp = (dayForecastArr[dayIndex].main.temp - 273.15).toFixed(2);
     let forecastWind = dayForecastArr[dayIndex].wind.speed;
     let forecastHumidity = dayForecastArr[dayIndex].main.humidity;
     let forecastIcon = dayForecastArr[dayIndex].weather[0].icon;
-
 
     let newDiv = document.createElement("div");
     let newImg = document.createElement("img");
