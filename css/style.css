@@ -30,3 +30,13 @@
     vertical-align: middle;
 }
 
+.today-card-text {
+    text-align: center;
+
+}
+
+#city-today {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 30%;
+}

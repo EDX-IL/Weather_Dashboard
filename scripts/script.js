@@ -95,7 +95,7 @@ function showClearCitiesButton() {
 function updateCityButtons() {
   //clear the buttons
   historyEl.innerHTML = "";
-  //create buttons from localstorage
+  //create buttons from local storage
   for (let index = 0; index < localStorage.length; index++) {
     var city = localStorage.key(index);
     //add button for each city under historyEL-set unique ID attribute
@@ -133,30 +133,60 @@ function displayForecastForCity(cityClicked) {
   let cityCoOrds = JSON.parse(localStorage.getItem(cityClicked));
   let cityLat = cityCoOrds[0];
   let cityLon = cityCoOrds[1];
+  getWeatherFromLatAndLon(cityLat, cityLon);
   getForecastFromLatAndLon(cityLat, cityLon);
 }
 
-//function to getForecast from latitude and longitude
+//function to get 5 day Forecast from latitude and longitude
 function getForecastFromLatAndLon(lat, lon) {
-  //URL to Get forecast from coordinates
+  //URL to Get 5 day forecast from coordinates
   let openWMForecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OWMApiKey}`;
 
   fetch(openWMForecastURL)
     .then((response) => response.json())
     .then((forecastReturn) => {
-      displayTodayForecast(forecastReturn);
       display5DayForecast(forecastReturn);
     });
 }
 
-//function that takes the returned forecast from OWM and displays the city as they return it
-function displayTodayForecast(returnedForecast) {
-  let cityToDisplay = returnedForecast.city.name;
-  let newDiv = document.createElement("div");
+//function to get today's weather from latitude and longitude
+function getWeatherFromLatAndLon(lat, lon) {
+  //URL to Get today's forecast from coordinates
+  let openWMWeatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OWMApiKey}`;
 
+  fetch(openWMWeatherURL)
+    .then((response) => response.json())
+    .then((weatherReturn) => {
+      displayTodayForecast(weatherReturn);
+    });
+}
+//function that takes the returned forecast from OWM and displays the city as they return it
+function displayTodayForecast(returnedWeather) {
+  let cityToDisplay = returnedWeather.name;
+  let todayWeatherDate = moment.unix(returnedWeather.dt).format("DD MMM YYYY");
+  let todayWeatherTemp = (returnedWeather.main.temp - 273.15).toFixed(2);
+  let todayWeatherWind = returnedWeather.wind.speed;
+  let todayWeatherHumidity = returnedWeather.main.humidity;
+  let todayWeatherIcon = returnedWeather.weather[0].icon;
+  let backgroundImageURL =  `http://openweathermap.org/img/wn/${todayWeatherIcon}@2x.png`;
+
+  let newDiv = document.createElement("div");
+  let newP = document.createElement("p");
+  let newImg = document.createElement("img");
+
+  newDiv.id = "city-today";
+  newDiv.style
+  newDiv.className = "card";
+  newDiv.style = "width: 100%";
   newDiv.innerHTML = `<h1 id="cityToDisplay">${cityToDisplay}</h1>`;
+
+  newP.className = "today-card-text";
+  newP.innerHTML = `<div> <h4> ${todayWeatherDate} </h4> </div> <div>Temp: ${todayWeatherTemp} ℃</div> <div>Wind: ${todayWeatherWind} KPH</div> <div>Humidity: ${todayWeatherHumidity} %</div>`;
+
+  newDiv.style.backgroundImage =  `url(${backgroundImageURL})`;
+  newDiv.append(newP);
   todayEl.append(newDiv);
-  //TODO - find out from Dane if we need to display Today separately from the 5 forecast cards as there is only 5 days of forecast free
+
 }
 
 //function to display 5Day Forecast from OWM
@@ -208,9 +238,8 @@ function display5DayForecast(returnedForecast) {
     newDiv.innerHTML = `<h4 class="date-header">${forecastDate} </h4>`;
 
     newImg.className = "card-img-top";
-    //newImg.src = "./images/default.png";
     newImg.src = `http://openweathermap.org/img/wn/${forecastIcon}@2x.png`;
-    newImg.alt = "Open Weather Map Logo";
+    newImg.alt = "Weather Icon";
 
     newDiv2.className = "card-body";
 
