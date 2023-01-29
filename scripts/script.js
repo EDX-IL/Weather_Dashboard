@@ -5,6 +5,11 @@ let clearButtonEl = document.querySelector("#clear-button");
 let forecastEl = document.querySelector("#forecast");
 let todayEl = document.querySelector("#today");
 
+//This sets the time that the displayed forecsat for each day is taken from
+//string from 3,6,9,12,15,18,21,24 from the 24 hour clock
+let dailyForecastHour = "12";
+let dailyForecastHourArr = ["3", "6", "9", "12", "15", "18", "21", "24"];
+
 //array to store forecast for 5 days (0-4)
 let dayForecastArr = [];
 
@@ -12,8 +17,12 @@ let dayForecastArr = [];
 let OWMApiKey = "f96f7ff289e95a70e78121ee26801ea4";
 
 //on opening up the page - load local storage
-document.onload = function () {
+window.onload = function () {
   updateCityButtons();
+  hideClearCitiesButton();
+  if (localStorage.length > 0) {
+    showClearCitiesButton();
+  }
 };
 
 // EVENT LISTENERS
@@ -33,8 +42,7 @@ clearButtonEl.addEventListener("click", function () {
   clearLocalStorage();
   updateCityButtons();
   clearForecast();
-  //hide clear cities button
-  document.getElementById("clear-button").style.display = "none";
+  hideClearCitiesButton();
 });
 
 //add event listener for searchButtonEl
@@ -50,8 +58,7 @@ searchButtonEl.addEventListener("click", function (event) {
     if (searchInputVal !== "") {
       //TODO check if city entered is actual city (not necessary for api)
       addCityAndCoOrdToLocalStorage(searchInputVal);
-      //display the clear cities button
-      document.getElementById("clear-button").style.display = "";
+      showClearCitiesButton();
       clearTheSearchInputField();
     }
   }
@@ -74,6 +81,14 @@ function clearForecast() {
 //function to clear the search input field (placeholder will display)
 function clearTheSearchInputField() {
   searchInputEl.value = "";
+}
+
+function hideClearCitiesButton() {
+  document.getElementById("clear-button").style.display = "none";
+}
+
+function showClearCitiesButton() {
+  document.getElementById("clear-button").style.display = "";
 }
 
 //This function updates the city buttons displayed from local storage
@@ -157,7 +172,7 @@ function display5DayForecast(returnedForecast) {
     .unix(returnedForecast.list[indexOffset].dt)
     .format("HH");
 
-  while (forecastHour != "12" && indexOffset < 41) {
+  while (forecastHour != dailyForecastHour && indexOffset < 41) {
     indexOffset++;
     forecastHour = moment
       .unix(returnedForecast.list[indexOffset].dt)
