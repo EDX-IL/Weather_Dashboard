@@ -14,3 +14,19 @@
 .date-header {
     text-align: center;
 }
+
+#cityToDisplay {
+    text-align: center;
+
+}
+
+#clear-button {    
+    text-align: center;
+    vertical-align: middle;
+}
+
+#clear-section {    
+    text-align: center;
+    vertical-align: middle;
+}
+
