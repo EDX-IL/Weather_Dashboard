@@ -8,14 +8,6 @@ let todayEl = document.querySelector("#today");
 //array to store forecast for 5 days (0-4)
 let dayForecastArr = [];
 
-//global variable of the city that's being displayed - used to update the button name
-
-//TODO handle empty local storage
-
-//variable to store the search input value ie. city
-//let searchInputVal = "";
-let searchInputVal = searchInputEl.placeholder;
-
 //MyOpenWeatherMap ApiKey
 let OWMApiKey = "f96f7ff289e95a70e78121ee26801ea4";
 
@@ -48,17 +40,15 @@ clearButtonEl.addEventListener("click", function () {
 //add event listener for searchButtonEl
 searchButtonEl.addEventListener("click", function (event) {
   event.preventDefault();
-  //alert("search button pressed");
-  //console.log(getFuncName());
-
-  //check if it was button pressed - may not be necessary
+  //variable to store the search input value ie. city
+  let searchInputVal = "";
+  //check if it was button pressed
   if (event.target.matches("button")) {
     //check if there was anything in the input field
     searchInputVal = searchInputEl.value.trim();
     //console.log(searchInputVal);
     if (searchInputVal !== "") {
-      //TODO check if city entered is actual city
-
+      //TODO check if city entered is actual city (not necessary for api)
       addCityAndCoOrdToLocalStorage(searchInputVal);
       //display the clear cities button
       document.getElementById("clear-button").style.display = "";
@@ -81,18 +71,18 @@ function clearForecast() {
   todayEl.innerHTML = "";
 }
 
+//function to clear the search input field (placeholder will display)
 function clearTheSearchInputField() {
   searchInputEl.value = "";
-  searchInputEl.placeholder = "Type City Name Here";
 }
 
-//This function updates the display
+//This function updates the city buttons displayed from local storage
 function updateCityButtons() {
+  //clear the buttons
   historyEl.innerHTML = "";
-
+  //create buttons from localstorage
   for (let index = 0; index < localStorage.length; index++) {
     var city = localStorage.key(index);
-
     //add button for each city under historyEL-set unique ID attribute
     let newButtonEl = document.createElement("button", (id = "TAG"));
     newButtonEl.textContent = city;
@@ -101,23 +91,19 @@ function updateCityButtons() {
   }
 }
 
-//This function stores the city and coordindates to local storage
+//This function stores the city and coordinates to local storage
 function addCityAndCoOrdToLocalStorage(cityToAdd) {
-  // URL to get coordinates from city
+  // URL to get coordinates from city name
   let openWMGeoURL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityToAdd}&limit=1&apikey=${OWMApiKey}`;
 
   fetch(openWMGeoURL)
     .then((response) => response.json())
     .then((cityReturn) => {
-      // console.log(cityReturn[0]);
-
       let cityCoOrds = [];
-
       let cityCoOrdLat = cityReturn[0].lat;
       let cityCoOrdLon = cityReturn[0].lon;
       cityCoOrds.push(cityCoOrdLat);
       cityCoOrds.push(cityCoOrdLon);
-      //  console.log("coOrdsArr:" , (JSON.stringify(cityCoOrds)));
       localStorage.setItem(cityToAdd, JSON.stringify(cityCoOrds));
     })
     .then((response) => {
@@ -126,18 +112,12 @@ function addCityAndCoOrdToLocalStorage(cityToAdd) {
 }
 
 function displayForecastForCity(cityClicked) {
-   //clear today display
-   todayEl.innerHTML="";
+  //clear today/city name display
+  todayEl.innerHTML = "";
   // get latitude and longitude for city clicked
   let cityCoOrds = JSON.parse(localStorage.getItem(cityClicked));
-
-  // console.log(cityCoOrds);
   let cityLat = cityCoOrds[0];
   let cityLon = cityCoOrds[1];
-
-  // console.log("cityLat:", cityLat);
-  // console.log("cityLon:", cityLon);
-
   getForecastFromLatAndLon(cityLat, cityLon);
 }
 
@@ -160,22 +140,33 @@ function displayTodayForecast(returnedForecast) {
   let newDiv = document.createElement("div");
   newDiv.innerHTML = `<h1 id="cityToDisplay">${cityToDisplay}</h1>`;
   todayEl.append(newDiv);
-
-  //TODO - find out if we need to do Today separately from the cards as there is only 5 days of forecast free
+  //TODO - find out from Dane if we need to display Today separately from the 5 forecast cards as there is only 5 days of forecast free
 }
 
 //function to display 5Day Forecast from OWM
 function display5DayForecast(returnedForecast) {
-  //  console.log(getFuncName());
-  console.log(returnedForecast);
+  // dayIndex is used access dayForecastArr(ay) for 5 (0-4)  days.
   let dayIndex = 0;
-
   //clear 5 day forecast
   forecastEl.innerHTML = "";
 
-  //TODO find where midday is and use that to modify index offset
+
   //indexOffset is used to get midday from the returnedForecast (which is dependent on the time of day the request is made)
-  let indexOffset = 3;
+  let indexOffset = 0
+  do {
+      forecastHour=moment
+        .unix(returnedForecast.list[indexOffset].dt)
+        .format("hh");
+      console.log(forecastHour);
+      console.log (indexOffset);
+    indexOffset++;
+    
+    } while ( (forecastHour !="12") && (indexOffset < 41));
+
+
+
+    console.log (indexOffset);
+  
 
   for (
     let index = indexOffset;
@@ -194,15 +185,12 @@ function display5DayForecast(returnedForecast) {
       .unix(returnedForecast.list[index].dt)
       .format("hh:mm a ");
 
-    console.log(dayForecastArr[dayIndex]);
-
-    //  console.log ('day', dayIndex);
+    //values to be displayed for each day
     let forecastTemp = (dayForecastArr[dayIndex].main.temp - 273.15).toFixed(2);
     let forecastWind = dayForecastArr[dayIndex].wind.speed;
     let forecastHumidity = dayForecastArr[dayIndex].main.humidity;
     let forecastIcon = dayForecastArr[dayIndex].weather[0].icon;
 
-    //TODO  get the data from dayForecastArr and display
 
     let newDiv = document.createElement("div");
     let newImg = document.createElement("img");
