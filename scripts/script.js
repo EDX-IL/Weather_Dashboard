@@ -153,6 +153,7 @@ function getForecastFromLatAndLon(lat, lon) {
 function displayTodayForecast(returnedForecast) {
   let cityToDisplay = returnedForecast.city.name;
   let newDiv = document.createElement("div");
+
   newDiv.innerHTML = `<h1 id="cityToDisplay">${cityToDisplay}</h1>`;
   todayEl.append(newDiv);
   //TODO - find out from Dane if we need to display Today separately from the 5 forecast cards as there is only 5 days of forecast free
@@ -188,7 +189,7 @@ function display5DayForecast(returnedForecast) {
 
     let forecastDate = moment
       .unix(returnedForecast.list[index].dt)
-      .format("DD MMM YYYY hh:mm a ");
+      .format("DD MMM YYYY");
 
     //values to be displayed for each day
     let forecastTemp = (dayForecastArr[dayIndex].main.temp - 273.15).toFixed(2);
