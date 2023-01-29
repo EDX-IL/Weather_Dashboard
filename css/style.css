@@ -37,6 +37,22 @@
 
 #city-today {
     background-position: center;
-    background-repeat: no-repeat;
+   /* background-repeat: no-repeat; */
     background-size: 30%;
+   
+}
+
+.card-img-top {
+    size: 75%;
+}
+
+.card-body {
+    margin-top: 0px;
+    padding:0px !important ;    
+    text-align: center;
+}
+
+#clear-section {
+
+    padding: 1%;
 }
