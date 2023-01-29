@@ -156,24 +156,35 @@ function display5DayForecast(returnedForecast) {
 
     let forecastDate = moment
       .unix(returnedForecast.list[index].dt)
-      .format("DD MMM YYYY hh:mm a");
+      .format("DD MMM YYYY ");
+
+    let forecastTime =  moment
+    .unix(returnedForecast.list[index].dt)
+    .format("hh:mm a ");
 
     console.log(dayForecastArr[dayIndex]);
  
     //  console.log ('day', dayIndex);
+  let forecastTemp = (( dayForecastArr[dayIndex].main.temp) -273.15).toFixed(2);
+  let forecastWind = dayForecastArr[dayIndex].wind.speed;
+  let forecastHumidity = dayForecastArr[dayIndex].main.humidity;
 
-    //TODO Dynamically create HTML Cards for each day
+    //TODO  get the data from dayForecastArr and display
     
+   
     let newDiv = document.createElement("div");
     let newImg = document.createElement("img");
     let newDiv2 = document.createElement("div");
     let newP = document.createElement("p")
 
     
+
+
     newDiv.id = "day" + (dayIndex + 1);
-  //  newDiv.textContent = "day:" + (dayIndex + 1) + " forecast";
     newDiv.className = "card";
     newDiv.style = "width: 20%";
+    newDiv.innerHTML = `<h4 class="date-header">${(forecastDate)} </h4>`
+
 
     newImg.className="card-img-top";
     newImg.src = "./images/default.png";
@@ -182,7 +193,7 @@ function display5DayForecast(returnedForecast) {
     newDiv2.className = "card-body";
 
     newP.className="card-text";
-    newP.textContent = "day:" + (dayIndex + 1) + " forecast";
+    newP.innerHTML = `<div>Temp: ${forecastTemp} ℃</div> <div>Wind: ${forecastWind} KPH</div> <div>Humidity: ${forecastHumidity} %</div>`;
 
 
     newDiv.append(newImg);
@@ -197,11 +208,4 @@ function display5DayForecast(returnedForecast) {
     dayIndex++;
   }
 
-
-  // <div class="card" style="width: 20%;" id="day1">
-  //   <img src="..." class="card-img-top" alt="...">
-  //   <div class="card-body">
-  //     <p class="card-text">Day 1 Weather</p>
-  //   </div>
-  // </div>
 }
