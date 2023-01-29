@@ -8,6 +8,8 @@ let todayEl = document.querySelector("#today");
 //array to store forecast for 5 days (0-4)
 let dayForecastArr = [];
 
+//global variable of the city that's being displayed - used to update the button name
+
 //TODO handle empty local storage
 
 //variable to store the search input value ie. city
@@ -18,13 +20,10 @@ let searchInputVal = searchInputEl.placeholder;
 let OWMApiKey = "f96f7ff289e95a70e78121ee26801ea4";
 
 //on opening up the page - load local storage
-document.onload =function() {
-  
-  document.getElementById("clear-button").style.display = 'none';
-
+document.onload = function () {
   updateCityButtons();
+};
 
-}
 // EVENT LISTENERS
 
 // add event lister for history element i.e the city buttons
@@ -33,6 +32,7 @@ historyEl.addEventListener("click", function (event) {
   if (event.target.matches("button")) {
     let cityClicked = event.target.textContent;
     displayForecastForCity(cityClicked);
+    //  event.target.textContent = cityToDisplay;
   }
 });
 
@@ -42,8 +42,7 @@ clearButtonEl.addEventListener("click", function () {
   updateCityButtons();
   clearForecast();
   //hide clear cities button
-  document.getElementById("clear-button").style.display = 'none';
-
+  document.getElementById("clear-button").style.display = "none";
 });
 
 //add event listener for searchButtonEl
@@ -55,18 +54,17 @@ searchButtonEl.addEventListener("click", function (event) {
   //check if it was button pressed - may not be necessary
   if (event.target.matches("button")) {
     //check if there was anything in the input field
-    //TODO - deal with the confusion the placeholder may cause user
     searchInputVal = searchInputEl.value.trim();
     //console.log(searchInputVal);
     if (searchInputVal !== "") {
       //TODO check if city entered is actual city
 
       addCityAndCoOrdToLocalStorage(searchInputVal);
+      //display the clear cities button
+      document.getElementById("clear-button").style.display = "";
+      clearTheSearchInputField();
     }
   }
-
-  //display clear cities button
-  document.getElementById("clear-button").style.display = '';
 });
 
 //FUNCTIONS
@@ -80,7 +78,12 @@ function clearLocalStorage() {
 function clearForecast() {
   forecastEl.innerHTML = "";
   historyEl.innerHTML = "";
-  todayEl.innerHTML="";
+  todayEl.innerHTML = "";
+}
+
+function clearTheSearchInputField() {
+  searchInputEl.value = "";
+  searchInputEl.placeholder = "Type City Name Here";
 }
 
 //This function updates the display
@@ -123,9 +126,8 @@ function addCityAndCoOrdToLocalStorage(cityToAdd) {
 }
 
 function displayForecastForCity(cityClicked) {
-  // console.log(getFuncName());
-  // console.log(cityClicked);
-
+   //clear today display
+   todayEl.innerHTML="";
   // get latitude and longitude for city clicked
   let cityCoOrds = JSON.parse(localStorage.getItem(cityClicked));
 
@@ -155,8 +157,6 @@ function getForecastFromLatAndLon(lat, lon) {
 //function that takes the returned forecast from OWM and displays the city as they return it
 function displayTodayForecast(returnedForecast) {
   let cityToDisplay = returnedForecast.city.name;
-  //console.log(cityToDisplay);
-
   let newDiv = document.createElement("div");
   newDiv.innerHTML = `<h1 id="cityToDisplay">${cityToDisplay}</h1>`;
   todayEl.append(newDiv);
