@@ -102,6 +102,7 @@ function updateCityButtons() {
     let newButtonEl = document.createElement("button", (id = "TAG"));
     newButtonEl.textContent = city;
     newButtonEl.setAttribute("id", "button-" + city);
+    newButtonEl.className = "city-button";
     historyEl.append(newButtonEl);
   }
 }
@@ -163,7 +164,7 @@ function getWeatherFromLatAndLon(lat, lon) {
 //function that takes the returned forecast from OWM and displays the city as they return it
 function displayTodayForecast(returnedWeather) {
   let cityToDisplay = returnedWeather.name;
-  let todayWeatherDate = moment.unix(returnedWeather.dt).format("DD MMM YYYY");
+  let todayWeatherDate = moment.unix(returnedWeather.dt).format("DD MMM YYYY h:mm a");
   let todayWeatherTemp = (returnedWeather.main.temp - 273.15).toFixed(2);
   let todayWeatherWind = returnedWeather.wind.speed;
   let todayWeatherHumidity = returnedWeather.main.humidity;
@@ -193,17 +194,22 @@ function display5DayForecast(returnedForecast) {
   //clear 5 day forecast
   forecastEl.innerHTML = "";
 
-  //indexOffset is used to get midday from the returnedForecast (which is dependent on the time of day the request is made)
+  //indexOffset is used to get midday from the returnedForecast
   let indexOffset = 0;
-  forecastHour = moment
-    .unix(returnedForecast.list[indexOffset].dt)
-    .format("HH");
+  //Timezone is used to make it midday local time.
+  let returnedForecastTimezone = returnedForecast.city.timezone;
+  let returnedForecastTime = returnedForecast.list[indexOffset].dt;
+  let adjustedForecastTime = returnedForecastTime + returnedForecastTimezone;
+  forecastHour = moment.unix(adjustedForecastTime).format("HH");
+  //this function rounds the forecast hour to the nearest 3 because there's only 3 hourly forecasts
+  forecastHour = ril_round(forecastHour, 3);
 
-  while (forecastHour != dailyForecastHour && indexOffset < 41) {
+  while (forecastHour != dailyForecastHour && indexOffset < 8) {
     indexOffset++;
-    forecastHour = moment
-      .unix(returnedForecast.list[indexOffset].dt)
-      .format("kk");
+    returnedForecastTime = returnedForecast.list[indexOffset].dt;
+    adjustedForecastTime = returnedForecastTime + returnedForecastTimezone;
+    forecastHour = moment.unix(adjustedForecastTime).format("kk");
+    forecastHour = ril_round(forecastHour, 3);
   }
 
   for (
