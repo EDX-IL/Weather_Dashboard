@@ -175,15 +175,14 @@ function displayTodayForecast(returnedWeather) {
   let newImg = document.createElement("img");
 
   newDiv.id = "city-today";
-  newDiv.style
   newDiv.className = "card";
   newDiv.style = "width: 100%";
   newDiv.innerHTML = `<h1 id="cityToDisplay">${cityToDisplay}</h1>`;
+  newDiv.style.backgroundImage =  `url(${backgroundImageURL})`;
 
   newP.className = "today-card-text";
   newP.innerHTML = `<div> <h4> ${todayWeatherDate} </h4> </div> <div>Temp: ${todayWeatherTemp} ℃</div> <div>Wind: ${todayWeatherWind} KPH</div> <div>Humidity: ${todayWeatherHumidity} %</div>`;
 
-  newDiv.style.backgroundImage =  `url(${backgroundImageURL})`;
   newDiv.append(newP);
   todayEl.append(newDiv);
 
