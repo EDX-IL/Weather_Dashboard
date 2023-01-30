@@ -5,9 +5,10 @@ let clearButtonEl = document.querySelector("#clear-button");
 let forecastEl = document.querySelector("#forecast");
 let todayEl = document.querySelector("#today");
 
-//This sets the time that the displayed forecsat for each day is taken from
+//This sets the time that the displayed forecast for each day is taken from
 //string from 3,6,9,12,15,18,21,24 from the 24 hour clock
 let dailyForecastHour = "12";
+//This would be used if the user was to input the time of day for the forecast
 let dailyForecastHourArr = ["3", "6", "9", "12", "15", "18", "21", "24"];
 
 //array to store forecast for 5 days (0-4)
@@ -33,7 +34,6 @@ historyEl.addEventListener("click", function (event) {
   if (event.target.matches("button")) {
     let cityClicked = event.target.textContent;
     displayForecastForCity(cityClicked);
-    //  event.target.textContent = cityToDisplay;
   }
 });
 
@@ -168,24 +168,21 @@ function displayTodayForecast(returnedWeather) {
   let todayWeatherWind = returnedWeather.wind.speed;
   let todayWeatherHumidity = returnedWeather.main.humidity;
   let todayWeatherIcon = returnedWeather.weather[0].icon;
-  let backgroundImageURL =  `http://openweathermap.org/img/wn/${todayWeatherIcon}@2x.png`;
-
+  let backgroundImageURL = `http://openweathermap.org/img/wn/${todayWeatherIcon}@2x.png`;
   let newDiv = document.createElement("div");
   let newP = document.createElement("p");
-  let newImg = document.createElement("img");
 
   newDiv.id = "city-today";
   newDiv.className = "card";
   newDiv.style = "width: 100%";
   newDiv.innerHTML = `<h1 id="cityToDisplay">${cityToDisplay}</h1>`;
-  newDiv.style.backgroundImage =  `url(${backgroundImageURL})`;
+  newDiv.style.backgroundImage = `url(${backgroundImageURL})`;
 
   newP.className = "today-card-text";
   newP.innerHTML = `<div> <h4> ${todayWeatherDate} </h4> </div> <div>Temp: ${todayWeatherTemp} ℃</div> <div>Wind: ${todayWeatherWind} KPH</div> <div>Humidity: ${todayWeatherHumidity} %</div>`;
 
   newDiv.append(newP);
   todayEl.append(newDiv);
-
 }
 
 //function to display 5Day Forecast from OWM

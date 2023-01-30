@@ -1,6 +1,6 @@
 //standard functions to be used in other scripts
 
-/* get the funtion name from within which the function is called. Useful for console.log */
+/* get the function name from within which the function is called. Useful for console.log */
 function getFuncName() {
     return getFuncName.caller.name
 }
